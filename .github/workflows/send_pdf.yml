@@ -3,7 +3,7 @@ name: Send PDF Mail
 on:
   workflow_dispatch: # chạy thủ công
   schedule:
-    - cron: "*/10 * * * *" # chạy mỗi 10 phút, chỉnh tuỳ bạn
+    - cron: "*/5 * * * *"
 
 jobs:
   send-pdf:
