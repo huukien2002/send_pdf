@@ -1,10 +1,9 @@
 const admin = require("firebase-admin");
-const nodemailer = require("nodemailer");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
+const nodemailer = require("nodemailer");
 const path = require("path");
 
-// Firebase
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
@@ -13,7 +12,6 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-// SMTP
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -24,7 +22,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Lấy tất cả post chưa gửi
 async function getUnsentPosts() {
   const snapshot = await db
     .collection("posts")
@@ -33,7 +30,6 @@ async function getUnsentPosts() {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
-// Tạo PDF từ post
 async function createPDF(post) {
   const filePath = path.join("/tmp", `${post.id}.pdf`);
   const doc = new PDFDocument();
@@ -51,7 +47,6 @@ async function createPDF(post) {
   return filePath;
 }
 
-// Gửi mail
 async function sendEmail(post, pdfPath) {
   await transporter.sendMail({
     from: process.env.SMTP_USER,
@@ -61,7 +56,6 @@ async function sendEmail(post, pdfPath) {
     attachments: [{ filename: `${post.title}.pdf`, path: pdfPath }],
   });
 
-  // Đánh dấu là đã gửi
   await db.collection("posts").doc(post.id).update({ sent: true });
 }
 
