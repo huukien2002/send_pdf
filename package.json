@@ -1,0 +1,27 @@
+{
+  "name": "new-folder-(4)",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huukien2002/send_pdf.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/huukien2002/send_pdf/issues"
+  },
+  "homepage": "https://github.com/huukien2002/send_pdf#readme",
+  "dependencies": {
+    "firebase-admin": "^13.5.0",
+    "nodemailer": "^7.0.6",
+    "pdfkit": "^0.17.2",
+    "puppeteer": "^24.21.0"
+  }
+}
