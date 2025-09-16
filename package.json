@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/huukien2002/send_pdf#readme",
   "dependencies": {
+    "axios": "^1.12.2",
     "firebase-admin": "^13.5.0",
     "nodemailer": "^7.0.6",
     "pdfkit": "^0.17.2",
