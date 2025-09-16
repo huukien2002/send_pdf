@@ -1,9 +1,9 @@
 name: Send PDF Mail
 
 on:
-  workflow_dispatch: # chạy thủ công
+  workflow_dispatch:
   schedule:
-    - cron: "*/10 * * * *" # hoặc chỉnh theo ý bạn
+    - cron: "*/10 * * * *"
 
 jobs:
   send-pdf:
@@ -18,7 +18,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm install   # Không cần cd
 
       - name: Run send_pdf.js
         env:
