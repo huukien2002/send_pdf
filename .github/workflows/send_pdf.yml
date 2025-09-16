@@ -1,0 +1,28 @@
+name: Send PDF Mail
+
+on:
+  workflow_dispatch: # chạy thủ công
+  schedule:
+    - cron: "*/10 * * * *" # hoặc chỉnh theo ý bạn
+
+jobs:
+  send-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run send_pdf.js
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+        run: node scripts/send_pdf.js
