@@ -1,13 +1,14 @@
 name: Send PDF Mail
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # chạy thủ công
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/10 * * * *" # chạy mỗi 10 phút, chỉnh tuỳ bạn
 
 jobs:
   send-pdf:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,7 +19,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install   # Không cần cd
+        run: npm install
 
       - name: Run send_pdf.js
         env:
