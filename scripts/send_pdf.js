@@ -3,6 +3,7 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const path = require("path");
+const axios = require("axios"); // thêm axios để tải ảnh từ URL
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
@@ -38,9 +39,18 @@ async function createPDF(post) {
   doc.fontSize(20).text(post.title, { underline: true });
   doc.moveDown();
   doc.fontSize(14).text(post.content);
+
   if (post.imageUrl) {
-    doc.moveDown();
-    doc.image(post.imageUrl, { width: 300 });
+    try {
+      const response = await axios.get(post.imageUrl, {
+        responseType: "arraybuffer",
+      });
+      const imageBuffer = Buffer.from(response.data, "binary");
+      doc.moveDown();
+      doc.image(imageBuffer, { width: 300 });
+    } catch (err) {
+      console.error(`Không thể tải ảnh: ${post.imageUrl}`, err.message);
+    }
   }
 
   doc.end();
