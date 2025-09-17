@@ -1,9 +1,12 @@
 name: Send PDF Mail
 
 on:
-  workflow_dispatch: # chạy thủ công
+  workflow_dispatch: # Chạy thủ công
+  push:
+    branches:
+      - main # Chỉ push vào main mới trigger
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/5 * * * *" # Mỗi 5 phút theo giờ UTC
 
 jobs:
   send-pdf:
@@ -20,14 +23,28 @@ jobs:
         with:
           node-version: 20
 
-      # 3️⃣ Cài dependencies từ package.json
+      # 3️⃣ Cài dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4️⃣ Chạy script send_pdf.js
-      - name: Run send_pdf.js
+      # 4️⃣ Hiển thị một số thông tin debug
+      - name: Debug Info
+        run: |
+          echo "Branch: $GITHUB_REF"
+          echo "Workflow triggered by: $GITHUB_EVENT_NAME"
+          echo "Secrets set:"
+          echo "SMTP_USER set: $([[ -z \"$SMTP_USER\" ]] && echo '❌' || echo '✅')"
+          echo "SMTP_PASS set: $([[ -z \"$SMTP_PASS\" ]] && echo '❌' || echo '✅')"
+          echo "FIREBASE_SERVICE_ACCOUNT set: $([[ -z \"$FIREBASE_SERVICE_ACCOUNT\" ]] && echo '❌' || echo '✅')"
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      # 5️⃣ Chạy script send_pdf.js
+      - name: Run send_pdf.js
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: node scripts/send_pdf.js
