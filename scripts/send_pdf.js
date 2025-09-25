@@ -69,7 +69,7 @@ async function createPDF(post) {
 async function sendEmail(post, pdfPath) {
   await transporter.sendMail({
     from: process.env.SMTP_USER,
-    to: "lehuukien270702@gmail.com", // email người nhận
+    to: post.authorId, // email người nhận
     subject: `📄 Bài mới: ${post.title}`,
     // Dùng HTML thay vì text
     html: `
